@@ -1,0 +1,46 @@
+//https://github.com/Gidiy/The_Tooth_Fast
+//https://www.thingiverse.com/thing:5448138
+//https://www.linkedin.com/in/gilad-iosef-890594224/
+//Enjoy!
+
+#include <Stepper.h> // Include the header file
+#define STEPS 200
+
+Stepper stepper(STEPS, 4, 6, 5, 7);
+
+long duration;
+int distance;
+int val = 800;
+static int trigPin = 3;
+static int echoPin = 2;
+
+void setup() {
+  pinMode(trigPin, OUTPUT); //  trigPin
+  pinMode(echoPin, INPUT); //  echoPin
+  Serial.begin(9600); // //  9600 of baud
+  stepper.setSpeed(100);
+}
+
+void loop()
+{
+  if (TBD(trigPin, echoPin) == 3) //toothbrush Distance
+  {
+    stepper.step(val);
+  }
+}
+
+int TBD(int trigPin, int echoPin)
+{
+  digitalWrite(trigPin, LOW);// Clears the trigPin condition
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);// Reads the echoPin, returns the sound wave travel time in microseconds
+  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back), Calculating the distance
+  return distance;
+
+  Serial.print("Distance: ");  // Displays the distance on the Serial Monitor
+  Serial.print(distance);
+  Serial.println(" cm");
+}
